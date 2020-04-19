@@ -14,16 +14,29 @@ class Ship:
         pygame.display.set_caption("Space Fighter")
 
         # Load ship images  and get its rect.
-        self.image = pygame.image.load('images//bird1.png')
-        self.new_image = pygame.transform.scale(self.image,(60,40))
-        self.rect = self.new_image.get_rect()
+        self.sprite_sheet = pygame.image.load('images//player_plane.png').convert()
+        self.image = self.get_image(0,0,64,64)
+        # self.new_image = pygame.transform.scale(self.image,(60,40))
+        self.rect = self.image.get_rect()
 
         # Start each new ship at left-centered position.
         self.rect.midleft = self.screen_rect.midleft
 
+    def get_image(self,x,y,width,height):
+        """ Grab a single image out of a larger spritesheet
+            Pass in the x, y location of the sprite
+            and the width and height of the sprite. """
+        # Create a new blank image.
+        image = pygame.Surface([width,height]).convert()
+        # Copy the sprite from the large sheet onto the smaller image
+        image.blit(self.sprite_sheet,(0,0),(x,y,width,height))
+        # Assuming black works as the transparent color.
+        image.set_colorkey((0,0,0))
+        return image
+
     def blitme(self):
         """Draw ship at its current location"""
-        self.screen.blit(self.new_image, self.rect)
+        self.screen.blit(self.image, self.rect)
 
     def run_ship(self):
         """Start the main loop."""
